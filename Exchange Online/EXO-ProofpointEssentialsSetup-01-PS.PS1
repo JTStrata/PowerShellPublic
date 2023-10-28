@@ -1,3 +1,31 @@
+<#
+.SYNOPSIS
+This script creates the needed prerequisites in an Exchange Online environment for Proofpoint
+Essentials customers. 
+
+.DESCRIPTION
+This script does the following:
+- Connects to Exchange Online (Customer Tenant)
+- Created the Transport rules to bypass Spam filtering in 365
+- Creates the inbound and outbound connectors for Proofpoint Essentials
+
+.NOTES
+File Name      : EXO-ProofpointEssentialsSetup-01-PS.ps1
+Author         : Julian Thibeault
+Prerequisite   : PowerShell V3
+Copyright 2023 : StrataNorth.co
+
+.LINK
+[]
+
+.EXAMPLE
+./EXO-ProofpointEssentialsSetup-01-PS.ps1
+
+#>
+
+# Import required module
+Import-Module ExchangeOnlineManagement
+
 # Connect to Exchange Online
 Connect-ExchangeOnline
 
