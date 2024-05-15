@@ -1,7 +1,7 @@
 <#===Azure AD===#>
 #Connect-AzureAD
-$azureadusers = Get-AzureADUser -All:$true | select displayname,objectid,objecttype,userprincipalname
-$azureadusercount = $azureadusers.count
+$azureadusers = Get-AzureADUser -All:$true | Select-Object displayname,objectid,objecttype,userprincipalname
+Write-Host "Number of Azure AD Users $($azureadusers.count)"
 
 <#===Exchnage Online===#>
 #Connect-ExchangeOnline
@@ -173,7 +173,7 @@ $publicFolderResults
 <#===SharePoint=== #>
 #Connect-SPOService https://spragueresources-admin.sharepoint.com
 $siteCollections = Get-SPOSite -Limit All -Detailed
-$SPOCollectionCount = $siteCollections.count
+Write-Host "Number of SharePoint Site Collections $($siteCollections.count)"
 
 # Initialize total size variable
 $totalSize = 0
@@ -207,7 +207,7 @@ foreach ($site in $oneDriveSites) {
 }
 
 # Display per user storage
-$UsersWithData = $userStorageDetails | where {$_.StorageUsedMB -ne "0"} | Format-Table User, StorageUsedMB
+$UsersWithData = $userStorageDetails | Where-Object {$_.StorageUsedMB -ne "0"} | Format-Table User, StorageUsedMB
 
 # Display total storage used in GB
 $totalStorageInGB = [math]::Round($totalStorageUsed / 1024, 2)
