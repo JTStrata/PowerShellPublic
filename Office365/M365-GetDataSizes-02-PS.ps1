@@ -170,8 +170,6 @@ $publicFolderResults
 
 
 
-
-
 <#===SharePoint=== #>
 #Connect-SPOService https://spragueresources-admin.sharepoint.com
 $siteCollections = Get-SPOSite -Limit All -Detailed
@@ -189,4 +187,30 @@ foreach ($site in $siteCollections) {
 
 # Convert total size to GB for easier reading
 $totalSizeGB = [math]::Round($totalSize / 1024, 2)
+
+
+<#===OneDrive=== #>
+# Get a list of all OneDrive sites
+$oneDriveSites = Get-SPOSite -IncludePersonalSite $true -Limit All | Where-Object { $_.Url -like "*-my.sharepoint.com/personal/*" }
+
+# Retrieve storage information
+$totalStorageUsed = 0
+$userStorageDetails = @()
+
+foreach ($site in $oneDriveSites) {
+    $storageUsed = $site.StorageUsageCurrent
+    $totalStorageUsed += $storageUsed
+    $userStorageDetails += [PSCustomObject]@{
+        User = $site.Owner
+        StorageUsedMB = $storageUsed
+    }
+}
+
+# Display per user storage
+$UsersWithData = $userStorageDetails | where {$_.StorageUsedMB -ne "0"} | Format-Table User, StorageUsedMB
+
+# Display total storage used in GB
+$totalStorageInGB = [math]::Round($totalStorageUsed / 1024, 2)
+Write-Host "Total users with OneDrive Storage Used: $($UsersWithData.count)" -ForegroundColor Green -BackgroundColor Black
+Write-Host "Total OneDrive Storage Used: $totalStorageInGB GB"  -ForegroundColor Green -BackgroundColor Black
 
