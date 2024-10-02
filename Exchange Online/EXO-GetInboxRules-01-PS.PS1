@@ -1,3 +1,5 @@
+Connect-ExchangeOnline
+
 $report = @()
 $rules = @()
 
